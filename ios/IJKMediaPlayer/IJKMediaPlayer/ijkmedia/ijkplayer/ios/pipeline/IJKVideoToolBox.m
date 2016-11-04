@@ -624,7 +624,7 @@ int videotoolbox_decode_video_internal(VideoToolBoxContext* context, AVCodecCont
             context->refresh_session = true;
         }
         if (status == kVTVideoDecoderMalfunctionErr) {
-            context->recovery_drop_packet = true;
+            //context->recovery_drop_packet = true;
             context->refresh_session = true;
         }
         goto failed;
