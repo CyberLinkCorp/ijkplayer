@@ -78,4 +78,6 @@
 #define FFP_PROP_INT64_ASYNC_STATISTIC_BUF_CAPACITY     20203
 
 #define FFP_PROP_INT64_LATEST_SEEK_LOAD_DURATION               20300
+
+#define FFP_PROP_INT64_READ_SPEED                       20400
 #endif

@@ -662,6 +662,7 @@ typedef struct FFPlayer {
     void               *inject_opaque;
     FFStatistic         stat;
     FFDemuxCacheControl dcc;
+    SDL_SpeedSampler2 pkt_read_sampler;
 
     AVApplicationContext *app_ctx;
 } FFPlayer;
@@ -769,6 +770,7 @@ inline static void ffp_reset_internal(FFPlayer *ffp)
 
     SDL_SpeedSamplerReset(&ffp->vfps_sampler);
     SDL_SpeedSamplerReset(&ffp->vdps_sampler);
+    SDL_SpeedSampler2Reset(&ffp->pkt_read_sampler, 2000);
 
     /* filters */
     ffp->vf_changed                     = 0;

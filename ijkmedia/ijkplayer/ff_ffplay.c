@@ -2782,6 +2782,7 @@ static int read_thread(void *arg)
             }
         }
         pkt->flags = 0;
+        SDL_SpeedSampler2Add(&ffp->pkt_read_sampler, pkt->size);
         ret = av_read_frame(ic, pkt);
         if (ret < 0) {
             int pb_eof = 0;
@@ -4099,6 +4100,8 @@ int64_t ffp_get_property_int64(FFPlayer *ffp, int id, int64_t default_value)
             return ffp->stat.buf_capacity;
         case FFP_PROP_INT64_LATEST_SEEK_LOAD_DURATION:
             return ffp ? ffp->stat.latest_seek_load_duration : default_value;
+        case FFP_PROP_INT64_READ_SPEED:
+            return ffp ? SDL_SpeedSampler2GetSpeed(&ffp->pkt_read_sampler) : default_value;
         default:
             return default_value;
     }

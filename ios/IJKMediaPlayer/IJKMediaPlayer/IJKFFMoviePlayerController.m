@@ -202,6 +202,7 @@ void IJKFFIOStatCompleteRegister(void (*cb)(const char *url,
         _glView = [[IJKSDLGLView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
         _glView.shouldShowHudView = NO;
         _view   = _glView;
+        [_glView setHudValue:nil forKey:@"read-spd"];
         [_glView setHudValue:nil forKey:@"scheme"];
         [_glView setHudValue:nil forKey:@"host"];
         [_glView setHudValue:nil forKey:@"path"];
@@ -692,10 +693,33 @@ inline static NSString *formatedSpeed(int64_t bytes, int64_t elapsed_milli) {
     }
 }
 
+inline static NSString *formatedSpeed2(int64_t bytes, int64_t elapsed_milli) {
+    if (elapsed_milli <= 0) {
+        return @"N/A";
+    }
+
+    if (bytes <= 0) {
+        return @"0";
+    }
+
+    float bits_per_sec = ((float)bytes) * 8 * 1000.f /  elapsed_milli;
+    if (bits_per_sec >= 1000 * 1000) {
+        return [NSString stringWithFormat:@"%.2f Mbps", ((float)bits_per_sec) / 1000 / 1000];
+    } else if (bits_per_sec >= 1000) {
+        return [NSString stringWithFormat:@"%.1f Kbps", ((float)bits_per_sec) / 1000];
+    } else {
+        return [NSString stringWithFormat:@"%ld bps", (long)bits_per_sec];
+    }
+}
+
 - (void)refreshHudView
 {
     if (_mediaPlayer == nil)
         return;
+
+    int64_t readSpeed = ijkmp_get_property_int64(_mediaPlayer, FFP_PROP_INT64_READ_SPEED, 0);
+    [_glView setHudValue:[NSString stringWithFormat:@"%@", formatedSpeed2(readSpeed, 1000)]
+                  forKey:@"read-spd"];
 
     int64_t vdec = ijkmp_get_property_int64(_mediaPlayer, FFP_PROP_INT64_VIDEO_DECODER, FFP_PROPV_DECODER_UNKNOWN);
     float   vdps = ijkmp_get_property_float(_mediaPlayer, FFP_PROP_FLOAT_VIDEO_DECODE_FRAMES_PER_SECOND, .0f);
