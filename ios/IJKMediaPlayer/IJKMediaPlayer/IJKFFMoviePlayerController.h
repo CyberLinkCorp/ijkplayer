@@ -103,7 +103,11 @@ typedef enum IJKLogLevel {
                    forKey:(NSString *)key
                ofCategory:(IJKFFOptionCategory)category;
 
+- (int64_t)get_property_int64:(int)propertyId
+                      default:(int64_t)value;
 
+- (float)get_property_float:(int)propertyId
+                    default:(float)value;
 
 - (void)setFormatOptionValue:       (NSString *)value forKey:(NSString *)key;
 - (void)setCodecOptionValue:        (NSString *)value forKey:(NSString *)key;

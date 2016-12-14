@@ -712,6 +712,16 @@ inline static NSString *formatedSpeed2(int64_t bytes, int64_t elapsed_milli) {
     }
 }
 
+- (int64_t)get_property_int64:(int)propertyId default:(int64_t)value
+{
+    return ijkmp_get_property_int64(_mediaPlayer, propertyId, value);
+}
+
+- (float)get_property_float:(int)propertyId default:(float)value
+{
+    return ijkmp_get_property_float(_mediaPlayer, propertyId, value);
+}
+
 - (void)refreshHudView
 {
     if (_mediaPlayer == nil)
