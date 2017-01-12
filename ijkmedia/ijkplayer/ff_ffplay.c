@@ -2729,8 +2729,8 @@ static int read_thread(void *arg)
 #else
               (is->audioq.size + is->videoq.size > ffp->dcc.max_buffer_size
 #endif
-            || (   stream_has_enough_packets(is->audio_st, is->audio_stream, &is->audioq, MIN_FRAMES)
-                && stream_has_enough_packets(is->video_st, is->video_stream, &is->videoq, MIN_FRAMES)
+            || (   stream_has_enough_packets(is->audio_st, is->audio_stream, &is->audioq, ffp->dcc.min_frames)
+                && stream_has_enough_packets(is->video_st, is->video_stream, &is->videoq, ffp->dcc.min_frames)
 #ifdef FFP_MERGE
                 && stream_has_enough_packets(is->subtitle_st, is->subtitle_stream, &is->subtitleq, MIN_FRAMES)))) {
 #else
@@ -3401,6 +3401,17 @@ static void ffp_show_dict(FFPlayer *ffp, const char *tag, AVDictionary *dict)
     }
 }
 
+void ffp_apply_option_dict(FFPlayer *ffp, int opt_category)
+{
+    AVDictionary **dict = ffp_get_opt_dict(ffp, opt_category);
+    AVDictionaryEntry *t = NULL;
+    int ret = 0;
+
+    while ((t = av_dict_get(*dict, "", t, AV_DICT_IGNORE_SUFFIX))) {
+        ret = av_opt_set(ffp, t->key, t->value, 0);
+    }
+}
+
 #define FFP_VERSION_MODULE_NAME_LENGTH 13
 static void ffp_show_version_str(FFPlayer *ffp, const char *module, const char *version)
 {
@@ -3453,8 +3464,8 @@ int ffp_prepare_async_l(FFPlayer *ffp, const char *file_name)
     ffp_show_dict(ffp, "sws-opts   ", ffp->sws_dict);
     ffp_show_dict(ffp, "swr-opts   ", ffp->swr_opts);
     av_log(NULL, AV_LOG_INFO, "===================\n");
-
     av_opt_set_dict(ffp, &ffp->player_opts);
+
     if (!ffp->aout) {
         ffp->aout = ffpipeline_open_audio_output(ffp->pipeline, ffp);
         if (!ffp->aout)

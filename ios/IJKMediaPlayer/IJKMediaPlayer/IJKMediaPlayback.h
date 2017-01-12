@@ -22,6 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "IJKFFOptions.h"
 
 typedef NS_ENUM(NSInteger, IJKMPMovieScalingMode) {
     IJKMPMovieScalingModeNone,       // No scaling
@@ -73,6 +74,10 @@ typedef NS_ENUM(NSInteger, IJKMPMovieTimeOption) {
 - (BOOL)isPlaying;
 - (void)shutdown;
 - (void)setPauseInBackground:(BOOL)pause;
+
+- (void)setOptionIntValueNow:(int64_t)value
+                      forKey:(NSString *)key
+                  ofCategory:(IJKFFOptionCategory)category;
 
 @property(nonatomic, readonly)  UIView *view;
 @property(nonatomic)            NSTimeInterval currentPlaybackTime;

@@ -391,6 +391,17 @@ inline static int getPlayerOption(IJKFFOptionCategory category)
     ijkmp_set_option_int(_mediaPlayer, getPlayerOption(category), [key UTF8String], value);
 }
 
+- (void)setOptionIntValueNow:(int64_t)value
+                      forKey:(NSString *)key
+                  ofCategory:(IJKFFOptionCategory)category
+{
+    assert(_mediaPlayer);
+    if (!_mediaPlayer)
+        return;
+
+    ijkmp_set_option_int_now(_mediaPlayer, getPlayerOption(category), [key UTF8String], value);
+}
+
 + (void)setLogReport:(BOOL)preferLogReport
 {
     ijkmp_global_set_log_report(preferLogReport ? 1 : 0);
