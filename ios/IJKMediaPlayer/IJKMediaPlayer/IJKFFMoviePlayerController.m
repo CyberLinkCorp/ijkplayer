@@ -1558,6 +1558,11 @@ static int ijkff_inject_callback(void *opaque, int message, void *data, size_t d
     }
 }
 
+- (void)activeAudioSession
+{
+    [[IJKAudioKit sharedInstance] setupAudioSession];
+}
+
 - (void)applicationWillEnterForeground
 {
     NSLog(@"IJKFFMoviePlayerController:applicationWillEnterForeground: %d", (int)[UIApplication sharedApplication].applicationState);
